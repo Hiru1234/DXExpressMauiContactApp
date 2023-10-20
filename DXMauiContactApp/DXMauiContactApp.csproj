@@ -1,0 +1,83 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net7.0-android;net7.0-ios</TargetFrameworks>
+    	<OutputType>Exe</OutputType>
+		<UseMaui>true</UseMaui>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<SingleProject>true</SingleProject>
+		<RootNamespace>DXMauiContactApp</RootNamespace>
+
+		<!-- Display name -->
+		<ApplicationTitle>DXMauiContactApp</ApplicationTitle>
+
+		<!-- App Identifier -->
+		<ApplicationId>com.companyname.DXMauiContactApp</ApplicationId>
+		<ApplicationIdGuid>3974C2D9-364F-46A5-946B-D4E259EB277E</ApplicationIdGuid>
+		<!-- Versions -->
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
+
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<UseInterpreter Condition="$(TargetFramework.Contains('-ios')) AND '$(Configuration)' == 'Release'">True</UseInterpreter>
+	</PropertyGroup>
+	<ItemGroup>
+		<!-- App Icon -->
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+
+		<!-- Images -->
+		<MauiImage Include="Resources\Images\*" />
+
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Resources\Images\andrewfuller.jpg" />
+	  <None Remove="Resources\Images\annedodsworth.jpg" />
+	  <None Remove="Resources\Images\delete.svg" />
+	  <None Remove="Resources\Images\editorsemail.svg" />
+	  <None Remove="Resources\Images\editorsname.svg" />
+	  <None Remove="Resources\Images\editorsphone.svg" />
+	  <None Remove="Resources\Images\janetleverling.jpg" />
+	  <None Remove="Resources\Images\lauracallahan.jpg" />
+	  <None Remove="Resources\Images\margaretpeacock.jpg" />
+	  <None Remove="Resources\Images\michaelsuyama.jpg" />
+	  <None Remove="Resources\Images\nancydavolio.jpg" />
+	  <None Remove="Resources\Images\robertking.jpg" />
+	  <None Remove="Resources\Images\stevenbuchanan.jpg" />
+	  <None Remove="Resources\Images\verticaldots.svg" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="6.0.0" />
+		<PackageReference Include="DevExpress.Maui.Charts" Version="23.1.5" />
+		<PackageReference Include="DevExpress.Maui.CollectionView" Version="23.1.5" />
+		<PackageReference Include="DevExpress.Maui.Editors" Version="23.1.5" />
+		<PackageReference Include="DevExpress.Maui.Core" Version="23.1.5" />
+		<PackageReference Include="DevExpress.Maui.DataGrid" Version="23.1.5" />
+		<PackageReference Include="DevExpress.Maui.Controls" Version="23.1.5" />
+		<PackageReference Include="DevExpress.Maui.Scheduler" Version="23.1.5" />
+		<TrimmableAssembly Include="DevExpress.Data.v23.1" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\AddContactPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\EditContactPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\LoginPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+</Project>
