@@ -1,5 +1,7 @@
 //using static CoreFoundation.DispatchSource;
 
+using DXMauiContactApp.Models;
+
 namespace DXMauiContactApp.Views;
 
 public partial class LoginPage : ContentPage
@@ -38,6 +40,6 @@ public partial class LoginPage : ContentPage
 
     bool IsCredentialCorrect(string username, string password)
     {
-        return username == "admin" && password == "1234";
+        return username == "Admin" && password == "1234";
     }
 }

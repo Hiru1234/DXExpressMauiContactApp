@@ -1,4 +1,6 @@
 ﻿using DevExpress.Maui.Core;
+using DXMauiContactApp.Models;
+using DXMauiContactApp.ViewModels;
 using DXMauiContactApp.Views;
 using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
@@ -15,9 +17,7 @@ namespace DXMauiContactApp
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            var contacts = new ObservableCollection<ContactPerson>(ViewModel._data);
-
+            var contacts = new ObservableCollection<ContactPerson>(ContactPersonViewModel.contactPeople);
             collectionView.ItemsSource = contacts;
         }
 
@@ -31,7 +31,8 @@ namespace DXMauiContactApp
         {
             if (collectionView.SelectedItem != null)
             {
-                await Navigation.PushAsync(new EditContactPage(((ContactPerson)collectionView.SelectedItem).ContactId));
+                string contactId = ((ContactPerson)collectionView.SelectedItem).ContactId;
+                await Navigation.PushAsync(new EditContactPage(contactId));
             }
 
         }

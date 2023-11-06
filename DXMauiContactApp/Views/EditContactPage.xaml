@@ -8,25 +8,40 @@
              xmlns:dxg="clr-namespace:DevExpress.Maui.DataGrid;assembly=DevExpress.Maui.DataGrid"
              xmlns:dxe="clr-namespace:DevExpress.Maui.Editors;assembly=DevExpress.Maui.Editors"
              xmlns:dxdf="clr-namespace:DevExpress.Maui.DataForm;assembly=DevExpress.Maui.Editors"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="DXMauiContactApp.Views.EditContactPage"
-             xmlns:local="clr-namespace:DXMauiContactApp"
+             xmlns:local="clr-namespace:DXMauiContactApp.Models"
+             xmlns:vm="clr-namespace:DXMauiContactApp.ViewModels"
+             x:DataType="vm:ContactPersonViewModel"
              Title="Edit Contact">
     <ContentPage.BindingContext>
-        <local:PersonalInfo/>
+        <vm:ContactPersonViewModel/>
     </ContentPage.BindingContext>
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsEnabled="False" IsVisible="False"/>
+    </Shell.BackButtonBehavior>
     <Grid>
         <ScrollView>
             <VerticalStackLayout  BackgroundColor="{AppThemeBinding Light={StaticResource Gray50}, Dark={StaticResource Black}}">
-                <Border BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray950}}" StrokeThickness="0" StrokeShape="RoundRectangle 10,10,0,0">
+                <Border StrokeThickness="0" StrokeShape="RoundRectangle 10,10,0,0">
                     <Border.Shadow>
                         <Shadow Brush="Gray" Offset="4,8" Radius="6" />
                     </Border.Shadow>
-                    <dxdf:DataFormView x:Name="dataForm"/>
+
+                    <VerticalStackLayout Spacing="10">
+                        <Entry x:Name="firstNameEntry" Placeholder="First Name" Text="{Binding Person.FirstName}"/>
+                        <Entry x:Name="lastNameEntry" Placeholder="Last Name" Text="{Binding Person.LastName}"/>
+                        <Entry x:Name="phoneEntry" Placeholder="Phone" Text="{Binding Person.Phone}">
+                            <Entry.Behaviors>
+                                <toolkit:MaskedBehavior Mask="(XXX) XXX-XXXX"/>
+                            </Entry.Behaviors>
+                        </Entry>
+                    </VerticalStackLayout>
                 </Border>
                 <StackLayout Padding="10,10,10,10" Spacing="10">
-                    <dxco:SimpleButton x:Name="updateButton" Text="Update Contact" Clicked="updateContact_Clicked" PressedIconColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Popup_Icon_Dark}}" PressedTextColor="{AppThemeBinding Light=Black, Dark={StaticResource Popup_Icon_Dark}}"/>
-                    <dxco:SimpleButton x:Name="cancelButton" Text="Cancel Changes" Clicked="cancelContact_Clicked" PressedIconColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Popup_Icon_Dark}}" PressedTextColor="{AppThemeBinding Light=Black, Dark={StaticResource Popup_Icon_Dark}}"/>
-                    <dxco:SimpleButton x:Name="deleteButton" Text="Delete Contact" Clicked="deleteButton_Clicked" PressedIconColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Popup_Icon_Dark}}" PressedTextColor="{AppThemeBinding Light=Black, Dark={StaticResource Popup_Icon_Dark}}"/>
+                    <dxco:SimpleButton x:Name="updateButton" Text="Update Contact" Clicked="updateContact_Clicked" Command="{Binding UpdateContactCommand}"/>
+                    <dxco:SimpleButton x:Name="cancelButton" Text="Cancel Changes" Clicked="cancelContact_Clicked"/>
+                    <dxco:SimpleButton x:Name="deleteButton" Text="Delete Contact" Clicked="deleteButton_Clicked" Command="{Binding DeleteContactCommand}" />
                 </StackLayout>
             </VerticalStackLayout>
         </ScrollView>

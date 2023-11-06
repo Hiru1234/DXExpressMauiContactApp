@@ -1,40 +1,46 @@
 namespace DXMauiContactApp.Views;
 
-using Contact = DXMauiContactApp.ContactPerson;
-
-//[QueryProperty(nameof(ContactId), "Id")]
+using DXMauiContactApp.Models;
+using DXMauiContactApp.ViewModels;
 
 public partial class EditContactPage : ContentPage
 {
     private string contact_Id;
 
     public EditContactPage(string contactId)
-	{
+    {
         contact_Id = contactId;
-        InitializeComponent();
-        ContactPerson contact = ViewModel.GetContactById(contact_Id);
+        ContactPerson contact = ContactPersonViewModel.GetContactById(contact_Id);
         if (contact != null)
         {
-            PersonalInfo test = new PersonalInfo
-            {
-                FirstName = contact.FirstName,
-                LastName = contact.LastName,
-                Phone = contact.Phone,
-            };
-            dataForm.DataObject = test;
+            ContactPersonViewModel.person = contact;
         }
-        else { 
-            dataForm.DataObject = new PersonalInfo(); 
+        else
+        {
+            ContactPersonViewModel.person = new();
         }
+        InitializeComponent();
     }
 
     private async void updateContact_Clicked(object sender, EventArgs e)
     {
-        dataForm.Commit();
-        ContactPerson contactPerson = ViewModel.MapUserDataToModel((PersonalInfo)dataForm.DataObject);
-        contactPerson.ContactId = contact_Id;
-        ViewModel.UpdateContact(contact_Id, contactPerson);
+        if (string.IsNullOrWhiteSpace(firstNameEntry.Text))
+        {
+            await DisplayAlert("Error", "First Name is Required", "Ok");
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(lastNameEntry.Text))
+        {
+            await DisplayAlert("Error", "Last Name is Required", "Ok");
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(phoneEntry.Text))
+        {
+            await DisplayAlert("Error", "Phone number is Required", "Ok");
+            return;
+        }
         await Navigation.PopAsync();
+        ContactPersonViewModel.person = new();
     }
 
     private async void cancelContact_Clicked(object sender, EventArgs e)
@@ -44,7 +50,7 @@ public partial class EditContactPage : ContentPage
 
     private async void deleteButton_Clicked(object sender, EventArgs e)
     {
-        ViewModel.DeleteContact(contact_Id);
         await Navigation.PopAsync();
+        ContactPersonViewModel.person = new();
     }
 }

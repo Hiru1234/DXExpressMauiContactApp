@@ -9,6 +9,9 @@
              xmlns:dxdf="clr-namespace:DevExpress.Maui.DataForm;assembly=DevExpress.Maui.Editors"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              xmlns:local="clr-namespace:DXMauiContactApp"
+             xmlns:vm="clr-namespace:DXMauiContactApp.ViewModels"
+             xmlns:models="clr-namespace:DXMauiContactApp.Models"
+             x:DataType="vm:ContactPersonViewModel"
              ios:Page.UseSafeArea="true"
              x:Class= "DXMauiContactApp.MainPage"
              Title="Contacts">
@@ -16,48 +19,50 @@
         <ToolbarItem x:Name="addContact" Text="Add Contact" Clicked="addContact_Clicked"/>
     </ContentPage.ToolbarItems>
     <ContentPage.BindingContext>
-        <local:ViewModel/>
+        <vm:ContactPersonViewModel/>
     </ContentPage.BindingContext>
     <ContentPage.Resources>
-        <DataTemplate x:Key="contactTemplate">
+        <DataTemplate x:Key="contactTemplate" x:DataType="{x:Type models:ContactPerson}">
             <dxco:SimpleButton Padding="5" BackgroundColor="WhiteSmoke" CornerRadius="0">
                 <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="*,*">
                     <Ellipse HeightRequest="40" WidthRequest="40" Fill="{Binding CategoryColor}" Margin="10" VerticalOptions="Center" Grid.RowSpan="2"/>
-                    <Label Text="{Binding Initials}" TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Black}}" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
-                    <Label Text="{Binding FullName}" TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" Grid.Column="1" VerticalOptions="End"/>
-                    <Label Text="{Binding Email}" TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource Gray300}}" VerticalOptions="Start" Grid.Column="1" Grid.Row="1"/>
+                    <Label Text="{Binding Initials}" Grid.RowSpan="2" VerticalOptions="Center" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+                    <Label Text="{Binding FullName}" Grid.Column="1" VerticalOptions="End"/>
+                    <Label Text="{Binding Phone}"  VerticalOptions="Start" Grid.Column="1" Grid.Row="1"/>
                 </Grid>
             </dxco:SimpleButton>
         </DataTemplate>
         <DataTemplate x:Key="groupItemTemplate">
             <StackLayout>
-                <Label FontAttributes="Bold" Margin="15,10,0,0" TextColor="{AppThemeBinding Light={StaticResource PhoneListTabTextColor}, Dark={StaticResource White}}" Text="{Binding Value, StringFormat='{0:d}'}"/>
+                <Label FontAttributes="Bold" Margin="15,10,0,0" Text="{Binding Value, StringFormat='{0:d}'}"/>
             </StackLayout>
         </DataTemplate>
 
 
     </ContentPage.Resources>
 
-    <Grid BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundThemeColor}, Dark={StaticResource Black}}">
-        <dxcv:DXCollectionView x:Name="collectionView" AllowGroupCollapse="False" ItemTemplate="{StaticResource contactTemplate}" SelectionMode="Single" SelectionChanged="collectionView_SelectionChanged">
-            <dxcv:DXCollectionView.GroupDescription>
-                <dxcv:GroupDescription FieldName="FirstName" GroupInterval="Alphabetical"/>
-            </dxcv:DXCollectionView.GroupDescription>
+    <Grid>
+        <VerticalStackLayout>
+            <dxcv:DXCollectionView x:Name="collectionView" AllowGroupCollapse="False" ItemTemplate="{StaticResource contactTemplate}" SelectionMode="Single" SelectionChanged="collectionView_SelectionChanged" ItemsSource="{Binding ContactPeople}">
+                <dxcv:DXCollectionView.GroupDescription>
+                    <dxcv:GroupDescription FieldName="FirstName" GroupInterval="Alphabetical"/>
+                </dxcv:DXCollectionView.GroupDescription>
 
-            <dxcv:DXCollectionView.GroupHeaderTemplate>
-                <DataTemplate>
-                    <StackLayout>
-                        <StackLayout.Margin>
-                            <OnPlatform x:TypeArguments="Thickness">
-                                <On Platform="iOS" Value="20,0,18,10"/>
-                                <On Platform="Android" Value="20,0,18,10"/>
-                            </OnPlatform>
-                        </StackLayout.Margin>
-                        <Label Margin="0,20,0,1" FontFamily="Roboto-Medium" TextColor="{AppThemeBinding Light={StaticResource PhoneListTabTextColor}, Dark={StaticResource White}}" Text="{Binding Value}"/>
-                        <BoxView BackgroundColor="{AppThemeBinding Light=White, Dark=Black}" HeightRequest="1"/>
-                    </StackLayout>
-                </DataTemplate>
-            </dxcv:DXCollectionView.GroupHeaderTemplate>
-        </dxcv:DXCollectionView>
+                <dxcv:DXCollectionView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <StackLayout.Margin>
+                                <OnPlatform x:TypeArguments="Thickness">
+                                    <On Platform="iOS" Value="20,0,18,10"/>
+                                    <On Platform="Android" Value="20,0,18,10"/>
+                                </OnPlatform>
+                            </StackLayout.Margin>
+                            <!--<Label Margin="0,20,0,1" FontFamily="Roboto-Medium" TextColor="{AppThemeBinding Light={StaticResource PhoneListTabTextColor}, Dark={StaticResource White}}" Text="{Binding Value}"/>-->
+                            <BoxView BackgroundColor="{AppThemeBinding Light=White, Dark=Black}" HeightRequest="1"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </dxcv:DXCollectionView.GroupHeaderTemplate>
+            </dxcv:DXCollectionView>
+        </VerticalStackLayout>
     </Grid>
 </ContentPage>

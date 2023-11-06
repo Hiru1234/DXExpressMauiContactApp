@@ -1,39 +1,38 @@
+//using AndroidX.Lifecycle;
 using DevExpress.Maui.Core;
+using DXMauiContactApp.Models;
+using DXMauiContactApp.ViewModels;
 using System.Net.Mail;
 
 namespace DXMauiContactApp.Views;
 
 public partial class AddContactPage : ContentPage
 {
-    public AddContactPage()
-	{
-		InitializeComponent();
-        dataForm.DataObject = new PersonalInfo();
 
-	}
+    public AddContactPage()
+    {
+        ContactPersonViewModel.person = new();
+        InitializeComponent();
+    }
 
     private async void createNewContact_Clicked(object sender, EventArgs e)
     {
-        dataForm.Commit();
-        ContactPerson contactPerson = ViewModel.MapUserDataToModel((PersonalInfo)dataForm.DataObject);
-        if(contactPerson.FirstName != null && contactPerson.LastName != null && contactPerson.Phone != null)
+        if (string.IsNullOrWhiteSpace(firstNameEntry.Text))
         {
-            contactPerson.ContactId = DateTime.Now.ToString("yyyyMMddHHmmssfff");
-            ViewModel.AddContact(contactPerson);
-            await Navigation.PopAsync();
+            await DisplayAlert("Error", "First Name is Required", "Ok");
+            return;
         }
-    }
-
-    private void ValidateCustomerProperties(object sender, DevExpress.Maui.DataForm.DataFormPropertyValidationEventArgs e)
-    {
-        if (e.PropertyName == "Email" && e.NewValue != null)
+        if (string.IsNullOrWhiteSpace(lastNameEntry.Text))
         {
-            MailAddress res;
-            if (!MailAddress.TryCreate((string)e.NewValue, out res))
-            {
-                e.HasError = true;
-                e.ErrorText = "Invalid email";
-            }
+            await DisplayAlert("Error", "Last Name is Required", "Ok");
+            return;
         }
+        if (string.IsNullOrWhiteSpace(phoneEntry.Text))
+        {
+            await DisplayAlert("Error", "Phone number is Required", "Ok");
+            return;
+        }
+        await Navigation.PopAsync();
+        ContactPersonViewModel.person = new();
     }
 }
